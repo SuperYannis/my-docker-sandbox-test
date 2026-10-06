@@ -10,6 +10,10 @@
 			"version": "latest",
 			"moby": true
 		},
+		// Rust toolchain to build and run the web app.
+		"ghcr.io/devcontainers/features/rust:1": {
+			"version": "latest"
+		},
 		// Runs an SSH server on port 2222 inside the container.
 		"ghcr.io/devcontainers/features/sshd:1": {
 			"version": "latest"
@@ -25,8 +29,11 @@
 	// Runs on the host: collect the host's public keys so they can be authorized in the container.
 	"initializeCommand": "sh -c 'cat \"$HOME\"/.ssh/*.pub > .devcontainer/authorized_keys 2>/dev/null || true'",
 
-	// Runs in the container: install the collected keys for the remote user.
-	"postCreateCommand": "mkdir -p ~/.ssh && chmod 700 ~/.ssh && cp .devcontainer/authorized_keys ~/.ssh/authorized_keys && chmod 600 ~/.ssh/authorized_keys",
+	// Runs in the container: install the collected keys for the remote user and the k6 load testing tool.
+	"postCreateCommand": {
+		"ssh-keys": "mkdir -p ~/.ssh && chmod 700 ~/.ssh && cp .devcontainer/authorized_keys ~/.ssh/authorized_keys && chmod 600 ~/.ssh/authorized_keys",
+		"k6": ".devcontainer/install-k6.sh"
+	},
 
 	// Configure tool-specific properties.
 	// "customizations": {},
