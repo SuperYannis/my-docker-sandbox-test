@@ -27,3 +27,6 @@ rustc-ice-*.txt
 # Added by cargo
 
 /target
+
+# Host public keys collected by the devcontainer initializeCommand
+.devcontainer/authorized_keys

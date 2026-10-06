@@ -1,0 +1,35 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/docker-in-docker
+{
+	"name": "Docker in Docker",
+	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+	"image": "mcr.microsoft.com/devcontainers/base:bookworm",
+
+	"features": {
+		"ghcr.io/devcontainers/features/docker-in-docker:2": {
+			"version": "latest",
+			"moby": true
+		},
+		// Runs an SSH server on port 2222 inside the container.
+		"ghcr.io/devcontainers/features/sshd:1": {
+			"version": "latest"
+		}
+	},
+
+	// Publish the SSH port on all interfaces of the Docker host, so it can also be forwarded
+	// further when the Docker host is itself a container (e.g. a Docker sandbox).
+	// 'appPort' (unlike 'forwardPorts') also works outside VS Code, e.g. with the devcontainer CLI.
+	// Connect with: ssh -p 2222 vscode@localhost
+	"appPort": ["2222:2222"],
+
+	// Runs on the host: collect the host's public keys so they can be authorized in the container.
+	"initializeCommand": "sh -c 'cat \"$HOME\"/.ssh/*.pub > .devcontainer/authorized_keys 2>/dev/null || true'",
+
+	// Runs in the container: install the collected keys for the remote user.
+	"postCreateCommand": "mkdir -p ~/.ssh && chmod 700 ~/.ssh && cp .devcontainer/authorized_keys ~/.ssh/authorized_keys && chmod 600 ~/.ssh/authorized_keys",
+
+	// Configure tool-specific properties.
+	// "customizations": {},
+
+	"remoteUser": "vscode"
+}
